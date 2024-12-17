@@ -88,12 +88,12 @@ class MatchData:
     def from_json(data: Dict[str, Any]) -> 'MatchData':
         metadata = Metadata(**data['metadata'])
         participants = [Participant(
-            augments=p['augments'],
+            augments=p.get('augments', []),
             companion=Companion(**p['companion']),
             gold_left=p['gold_left'],
             last_round=p['last_round'],
             level=p['level'],
-            missions=p['missions'],
+            missions=p.get('missions', {}),
             placement=p['placement'],
             players_eliminated=p['players_eliminated'],
             puuid=p['puuid'],
@@ -128,7 +128,7 @@ class MatchData:
         with open(filename, mode='a', newline='') as file:
             writer = csv.writer(file)
             
-            # Escreve o cabe�alho apenas se o arquivo ainda n eiste na pasta
+            # Escreve o cabeçalho apenas se o arquivo ainda não existir
             if not file_exists:
                 header = [f'character_{i+1}' for i in range(12)] + ['placement', 'win']
                 writer.writerow(header)
